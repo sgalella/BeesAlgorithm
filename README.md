@@ -5,6 +5,11 @@ Implementation of the bees algorithm proposed in [_The Bees Algorithm – A Nove
     <img width="512" height="304" src="images/ba.gif">
 </p>
 
+Honey bees communicate the location of resources such as flowers with nectar through the [waggle dance](https://www.youtube.com/watch?v=LU_KD1enR3Q). The angle of the bee relative to the sun conveys information about the direction, whereas the waggle's duration has information about the distance to the source. Bees on the hive will weigh the quality of those new places and explore them accordingly.
+
+<p align="center">
+    <img width="426" height="232" src="images/waggle_dance.png">
+</p>
 
 ## Installation
 
