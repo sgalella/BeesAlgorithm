@@ -24,10 +24,10 @@ class Landscape:
             func_name (str, optional): Optimization method. Defaults to "Sphere".
         """
         self.limits = (limits[0], limits[1], limits[2], limits[3])
-        self.X, self.Y = self.__create_meshgrid(resolution)
-        self.func = self.__get_func(func_name.lower())
+        self.X, self.Y = self._create_meshgrid(resolution)
+        self.func = self._get_func(func_name.lower())
 
-    def __get_func(self, func_name):
+    def _get_func(self, func_name):
         """
         Returns the fitness landscape given by func_name.
 
@@ -54,7 +54,7 @@ class Landscape:
         else:
             raise FunctionNotFoundError(func_name)
 
-    def __create_meshgrid(self, resolution):
+    def _create_meshgrid(self, resolution):
         """
         Creates the grid for the landscape.
 
@@ -115,16 +115,16 @@ class BeesAlgorithm:
         self.ngh = ngh
         self.positions = np.zeros((self.n, 2))
         self.fitness = np.zeros((self.n, ))
-        self.__initialize_position()
-        self.__calculate_fitness()
+        self._initialize_position()
+        self._calculate_fitness()
 
-    def __initialize_position(self):
+    def _initialize_position(self):
         """ Initializes position of bee randomly in landscape. """
         min_x, max_x, min_y, max_y = self.landscape.limits
         self.positions[:, 0] = np.random.uniform(min_x, max_x, size=(self.n, ))
         self.positions[:, 1] = np.random.uniform(min_y, max_y, size=(self.n, ))
 
-    def __calculate_fitness(self):
+    def _calculate_fitness(self):
         """ Computes the fitness for the bees. """
         for idx in range(self.n):
             pos = self.positions[idx, :]
@@ -146,7 +146,7 @@ class BeesAlgorithm:
                                   if (current_num + 1) * ratio_recruiter <= len(best) else recruiters[current_num * ratio_recruiter:])
             for idx in current_recruiters:
                 self.positions[idx, :] = self.positions[current_pos, :] + 2 * self.ngh * np.random.random(size=(1, 2)) - self.ngh
-        self.__calculate_fitness()
+        self._calculate_fitness()
 
     def recruit_scouts(self):
         """ Recruits scout bees accordint to parameters. """
@@ -180,7 +180,7 @@ class BeesAlgorithm:
         best_fitness_patch_m_e = self.fitness[patch_m_e].argsort()[::-1]
         self.positions[patch_m_e[best_fitness_patch_m_e][1:], 0] = np.random.uniform(min_x, max_x, size=(len(best_fitness_patch_m_e[1:]), ))
         self.positions[patch_m_e[best_fitness_patch_m_e][1:], 1] = np.random.uniform(min_y, max_y, size=(len(best_fitness_patch_m_e[1:]), ))
-        self.__calculate_fitness()
+        self._calculate_fitness()
 
     def plot(self):
         """ Plots bees in landscape. """
