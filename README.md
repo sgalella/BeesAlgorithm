@@ -26,7 +26,7 @@ pip install -r requirements.txt
 Run the algorithm from the command line with:
 
 ```python
-python bees_algorithm/run.py
+python bees_algorithm.py
 ```
 
 
