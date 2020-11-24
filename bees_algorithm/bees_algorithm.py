@@ -1,9 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-import optimization_functions as opt
-from visualization import VisualizeSearch
-
 
 class BeesAlgorithm:
     """ Bees algorithm optimization """
@@ -109,18 +106,3 @@ class BeesAlgorithm:
                 plt.gca().add_patch(circle)
                 plt.plot(self.positions[idx, 0], self.positions[idx, 1], "r*")
         plt.title(f"Best fitness: {self.fitness[best_fitness_idx[0]]:.2f}")
-
-
-def main():
-    """ Run the algorithm. """
-    np.random.seed(1234)
-    limits = (-5, 5, -3, 3)  # x_min, x_max, y_min, y_max
-    resolution = 100
-    num_iterations = 20
-    landscape = opt.SphereLandscape(limits, resolution)
-    bees = BeesAlgorithm(landscape, 20, 3, 1, 10, 7, 0.5)
-    VisualizeSearch.show_all(bees, num_iterations)
-
-
-if __name__ == "__main__":
-    main()
