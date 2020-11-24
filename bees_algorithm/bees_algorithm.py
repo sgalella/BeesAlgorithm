@@ -24,6 +24,7 @@ class BeesAlgorithm:
         self.nep = nep
         self.nsp = nsp
         self.ngh = ngh
+        self.best_fitness = None
         self.positions = np.zeros((self.n, 2))
         self.fitness = np.zeros((self.n, ))
         self._initialize_position()
@@ -40,6 +41,7 @@ class BeesAlgorithm:
         for idx in range(self.n):
             pos = self.positions[idx, :]
             self.fitness[idx] = self.landscape.evaluate_fitness(pos)
+        self.best_fitness = max(self.fitness)
 
     def update_positions(self, recruiters, best):
         """
@@ -105,4 +107,4 @@ class BeesAlgorithm:
                 circle = plt.Circle(self.positions[idx, :], radius=self.ngh, color="r", alpha=0.1)
                 plt.gca().add_patch(circle)
                 plt.plot(self.positions[idx, 0], self.positions[idx, 1], "r*")
-        plt.title(f"Best fitness: {self.fitness[best_fitness_idx[0]]:.2f}")
+        plt.title(f"Best fitness: {self.best_fitness:.2f}")
