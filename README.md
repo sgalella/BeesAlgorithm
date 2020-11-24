@@ -11,6 +11,7 @@ Honey bees communicate the location of resources such as flowers with nectar thr
     <img width="426" height="232" src="images/waggle_dance.png">
 </p>
 
+
 ## Installation
 
 To install the dependencies, run the following command:
@@ -20,13 +21,14 @@ pip install -r requirements.txt
 ```
 
 
-
 ## Usage
 
 Run the algorithm from the command line with:
 
 ```python
-python bees_algorithm.py
+python bees_algorithm
 ```
+
+To modify any parameter of the simulation, edit `bees_algorithm/__main__.py`. For more information regarding the different visualization modes check `notebooks/`.
 
 
