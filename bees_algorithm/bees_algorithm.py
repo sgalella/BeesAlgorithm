@@ -1,94 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+import optimization_functions as opt
 from visualization import VisualizeSearch
-
-
-class FunctionNotFoundError(Exception):
-    """ Optimization function given is not among the available ones. """
-    def __init__(self, name):
-        super().__init__(f"'{name}' optimization function not exist.")
-
-
-class Landscape:
-    """ Fitness landscape. """
-    def __init__(self, limits, resolution, func_name="Sphere"):
-        """
-        Initializes landscape.
-
-        Args:
-            limits (tuple): (x_min, x_max, y_min, y_max)
-            resolution ([type]): Number of points between max and min
-            func_name (str, optional): Optimization method. Defaults to "Sphere".
-        """
-        self.limits = (limits[0], limits[1], limits[2], limits[3])
-        self.X, self.Y = self._create_meshgrid(resolution)
-        self.func = self._get_func(func_name.lower())
-
-    def _get_func(self, func_name):
-        """
-        Returns the fitness landscape given by func_name.
-
-        Args:
-            func_name (str): Name of the optimization method
-
-        Raises:
-            FunctionNotFoundError: Optimization method is not among the possible ones.
-
-        Returns:
-            np.array: Fitness landscape.
-        """
-        if func_name == "sphere":
-            return self.X ** 2 + self.Y ** 2
-        elif func_name == "gricwank":
-            return 1 + (self.X ** 2 / 4000) + (self.Y ** 2 / 4000) - np.cos(self.X / np.sqrt(2)) - np.cos(self.Y / np.sqrt(2))
-        elif func_name == "himmelblau":
-            return (self.X ** 2 + self.Y - 11) ** 2 + (self.X + self.Y ** 2 - 7) ** 2
-        elif func_name == "ackley":
-            return (-20 * np.exp(-0.2 * np.sqrt(0.5 * (self.X ** 2 + self.Y ** 2))) - np.exp(0.5 * np.cos(2 * np.pi * self.X)
-                    + np.cos(2 * np.pi * self.Y)) + np.exp(1) + 20)
-        elif func_name == "rastringin":
-            return 20 + self.X ** 2 - 10 * np.cos(2 * np.pi * self.X) - 10 * np.cos(2 * np.pi * self.Y)
-        else:
-            raise FunctionNotFoundError(func_name)
-
-    def _create_meshgrid(self, resolution):
-        """
-        Creates the grid for the landscape.
-
-        Args:
-            resolution (int): Granularity of the grid.
-
-        Returns:
-            tuple: x and y-coordinates.
-        """
-        x = np.linspace(self.limits[0], self.limits[1], resolution)
-        y = np.linspace(self.limits[2], self.limits[3], resolution)
-        X, Y = np.meshgrid(x, y)
-        return X, Y
-
-    def get_value_func(self, pos):
-        """
-        Maps coordinates to position on grid and returns the fitness.
-
-        Args:
-            pos (tuple): Position of the particle.
-
-        Returns:
-            float: Fitness value.
-        """
-        pos_x, pos_y = pos
-        _, j = np.unravel_index((np.abs(self.X - pos_x)).argmin(), self.func.shape)
-        i, _ = np.unravel_index((np.abs(self.Y - pos_y)).argmin(), self.func.shape)
-        return np.fabs(self.func[i, j] - np.max(self.func))
-
-    def plot(self):
-        """ Plots the landscape. """
-        cs = plt.contour(self.X, self.Y, self.func)
-        plt.clabel(cs, inline=1, fontsize=6)
-        plt.imshow(self.func, extent=self.limits, origin="lower", alpha=0.3)
-        plt.xlim([self.limits[0], self.limits[1]])
-        plt.ylim([self.limits[2], self.limits[3]])
 
 
 class BeesAlgorithm:
@@ -128,7 +42,7 @@ class BeesAlgorithm:
         """ Computes the fitness for the bees. """
         for idx in range(self.n):
             pos = self.positions[idx, :]
-            self.fitness[idx] = self.landscape.get_value_func(pos)
+            self.fitness[idx] = self.landscape.evaluate_fitness(pos)
 
     def update_positions(self, recruiters, best):
         """
@@ -203,7 +117,7 @@ def main():
     limits = (-5, 5, -3, 3)  # x_min, x_max, y_min, y_max
     resolution = 100
     num_iterations = 20
-    landscape = Landscape(limits, resolution)
+    landscape = opt.SphereLandscape(limits, resolution)
     bees = BeesAlgorithm(landscape, 20, 3, 1, 10, 7, 0.5)
     VisualizeSearch.show_all(bees, num_iterations)
 
