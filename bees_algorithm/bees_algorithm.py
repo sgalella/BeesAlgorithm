@@ -1,9 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-np.random.seed(1234)
-
-MAX_ITERATIONS = 20
+from visualization import VisualizeSearch
 
 
 class FunctionNotFoundError(Exception):
@@ -89,6 +87,8 @@ class Landscape:
         cs = plt.contour(self.X, self.Y, self.func)
         plt.clabel(cs, inline=1, fontsize=6)
         plt.imshow(self.func, extent=self.limits, origin="lower", alpha=0.3)
+        plt.xlim([self.limits[0], self.limits[1]])
+        plt.ylim([self.limits[2], self.limits[3]])
 
 
 class BeesAlgorithm:
@@ -194,48 +194,18 @@ class BeesAlgorithm:
                 circle = plt.Circle(self.positions[idx, :], radius=self.ngh, color="r", alpha=0.1)
                 plt.gca().add_patch(circle)
                 plt.plot(self.positions[idx, 0], self.positions[idx, 1], "r*")
-
-
-def update_plots(limits, landscape, bees, colorbar=False):
-    """
-    Updates group of plots.
-
-    Args:
-        limits (tuple): (x_min, x_max, y_min, y_max)
-        landscape (Landscape): Fitness plane where bees interact.
-        bees (BeesAlgorithm): Bees on the landscape.
-        colorbar (bool, optional): Show colorbar. Defaults to False.
-    """
-    plt.cla()
-    ax = plt.gca()
-    ax.set_xlim([limits[0], limits[1]])
-    ax.set_ylim([limits[2], limits[3]])
-    landscape.plot()
-    bees.plot()
-    plt.title(f"Best fitness: {max(bees.fitness):.2f}")
-    if colorbar:
-        plt.colorbar(shrink=0.75)
-    plt.draw()
-    plt.pause(0.2)
+        plt.title(f"Best fitness: {self.fitness[best_fitness_idx[0]]:.2f}")
 
 
 def main():
     """ Run the algorithm. """
-    plt.figure(figsize=(8, 5))
-    limits = (-5, 5, -3, 3)  # min_x, max_x, min_y, max_y
-    landscape = Landscape(limits, 100)
+    np.random.seed(1234)
+    limits = (-5, 5, -3, 3)  # x_min, x_max, y_min, y_max
+    resolution = 100
+    num_iterations = 20
+    landscape = Landscape(limits, resolution)
     bees = BeesAlgorithm(landscape, 20, 3, 1, 10, 7, 0.5)
-    update_plots(limits, landscape, bees, True)
-    plt.ion()
-    for _ in range(MAX_ITERATIONS):
-        # Recruit scouts to best positions
-        recruiters_e, best_e, recruiters_m_e, best_m_e = bees.recruit_scouts()
-        update_plots(limits, landscape, bees)
-        # Abandon positions and search for new potential places
-        bees.abandon_locations(recruiters_e, best_e, recruiters_m_e, best_m_e)
-        update_plots(limits, landscape, bees)
-    plt.ioff()
-    plt.show()
+    VisualizeSearch.show_all(bees, num_iterations)
 
 
 if __name__ == "__main__":
