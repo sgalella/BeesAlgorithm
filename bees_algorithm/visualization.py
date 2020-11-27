@@ -8,7 +8,7 @@ class VisualizeSearch:
         Shows the evolution of the solutions in the landscape.
 
         Args:
-            algorithm (CuckooSearch): Cuckoo search initialized.
+            algorithm (BeesAlgorithm): Bees alggorithm initialized.
             num_iterations (int): Number of iterations to run the algorithm.
         """
         plt.figure(figsize=(8, 5))
@@ -45,7 +45,7 @@ class VisualizeSearch:
         Shows the last evolution of the solutions in the landscape.
 
         Args:
-            algorithm (CuckooSearch): Cuckoo search initialized.
+            algorithm (BeesAlgorithm): Bees algorithm initialized.
             num_iterations (int): Number of iterations to run the algorithm.
         """
         for _ in range(num_iterations):
