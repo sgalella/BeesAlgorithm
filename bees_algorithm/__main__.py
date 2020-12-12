@@ -1,8 +1,8 @@
 import numpy as np
 
-import optimization_functions as opt
-from bees_algorithm import BeesAlgorithm
-from visualization import VisualizeSearch
+from . import optimization_functions as opt
+from .bees_algorithm import BeesAlgorithm
+from .visualization import VisualizeSearch
 
 
 np.random.seed(1234)

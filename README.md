@@ -26,7 +26,7 @@ pip install -r requirements.txt
 Run the algorithm from the command line with:
 
 ```python
-python bees_algorithm
+python -m bees_algorithm
 ```
 
 To modify any parameter of the simulation, edit `bees_algorithm/__main__.py`. For more information regarding the different visualization modes check `notebooks/`.
